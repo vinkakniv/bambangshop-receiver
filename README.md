@@ -85,5 +85,12 @@ This is the place for you to write reflections:
 ### Mandatory (Subscriber) Reflections
 
 #### Reflection Subscriber-1
+> In this tutorial, we used RwLock<> to synchronise the use of Vec of Notifications. Explain why it is necessary for this case, and explain why we don’t use Mutex<> instead?
+
+Dalam tutorial ini, penggunaan `RwLock<>` dibutuhkan untuk memungkinkan akses baca bersamaan oleh beberapa thread ke `Vec Notifications` sekaligus memastikan penulisan dilakukan secara eksklusif. Ini efektif untuk struktur data yang lebih sering dibaca daripada ditulis, yang juga meningkatkan konkurensi dan kinerja. `RwLock<>` memperbolehkan banyak pembaca atau satu penulis pada suatu waktu, berbeda dengan `Mutex<>` yang membatasi akses ke satu thread untuk semua operasi, mengakibatkan pemblokiran yang tidak perlu ketika operasi baca lebih dominan. Oleh karena itu, `RwLock<>` adalah pilihan yang lebih baik untuk skenario di mana frekuensi baca tinggi dan tulis rendah, sedangkan `Mutex<>` lebih cocok untuk situasi dengan frekuensi baca dan tulis yang seimbang.
+
+> In this tutorial, we used lazy_static external library to define Vec and DashMap as a “static” variable. Compared to Java where we can mutate the content of a static variable via a static function, why didn't Rust allow us to do so?
+
+Rust memberlakukan beberapa aturan ketat terhadap variabel statis, yang berbeda dari bahasa pemrograman seperti Java, untuk meningkatkan keamanan dan keandalan program. Dalam Rust, variabel statis bersifat _immutable_ secara default untuk menghindari _data race_, situasi di mana beberapa operasi mencoba mengakses dan memodifikasi data yang sama secara bersamaan, yang bisa mengganggu integritas data. Selain itu, variabel statis di Rust harus diinisialisasi dengan nilai yang diketahui saat kompilasi, tidak memungkinkan inisialisasi atau modifikasi pada _runtime_ melalui fungsi statis, seperti yang mungkin dilakukan di Java. Sebagai solusi atas keterbatasan ini, Rust menyediakan `crate lazy_static` yang memungkinkan definisi variabel statis dengan inisialisasi pada _runtime_, namun tetap mempertahankan jaminan keamanan Rust. 
 
 #### Reflection Subscriber-2
